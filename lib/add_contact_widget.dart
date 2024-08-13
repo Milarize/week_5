@@ -84,12 +84,14 @@ class _AddContactWidgetState extends State<AddContactWidget> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         Navigator.pop(context);
-                        Provider.of<ContactProvider>(context, listen: false)
-                            .setCurrentContact(Contact(
-                                id: -1,
-                                name: nameConTroller.text,
-                                phone: phoneConTroller.text,
-                                email: emailConTroller.text));
+                        final provider = Provider.of<ContactProvider>(context,
+                            listen: false);
+                        provider.setCurrentContact(Contact(
+                            id: -1,
+                            name: nameConTroller.text,
+                            phone: phoneConTroller.text,
+                            email: emailConTroller.text));
+                        provider.saveContact();
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text('Process Data'),
                         ));

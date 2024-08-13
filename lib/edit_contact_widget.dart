@@ -93,6 +93,7 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                         phone: phoneConTroller.text,
                         email: emailConTroller.text);
                     provider.setCurrentContact(currentContact);
+                    provider.saveContact();
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text('Process Data'),
                     ));

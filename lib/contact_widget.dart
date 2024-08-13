@@ -17,86 +17,142 @@ class _ContactWidgetState extends State<ContactWidget> {
   Widget build(BuildContext context) {
     return Consumer<ContactProvider>(
       builder: (context, contactProvider, child) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('My Contact'),
-          ),
-          body: ListView.builder(
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: CircleAvatar(
-                  child: Text(contactProvider.items[index].name[0]),
-                ),
-                title: Text(
-                  contactProvider.items[index].name,
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      contactProvider.items[index].phone,
-                    ),
-                    Text(
-                      contactProvider.items[index].email,
-                    ),
-                  ],
-                ),
-                trailing: IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text('Delete Contact'),
-                          content: Text(
-                              'Are you sure you want to delete this contact'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Provider.of<ContactProvider>(context,
-                                        listen: false)
-                                    .deleteContact(index);
-                                Navigator.pop(context);
-                              },
-                              child: Text('Delete'),
-                            )
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      final provider =
-                          Provider.of<ContactProvider>(context, listen: false);
-                      provider.setCurrentContact(provider.items[index]);
-                      return EditContactWidget();
-                    },
-                  ));
-                },
-              );
-            },
-            itemCount: contactProvider.items.length,
-          ),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AddContactWidget();
-              }));
-            },
+        return DefaultTabController(
+          length: 3,
+          initialIndex: 1,
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('My Contact'),
+              bottom: TabBar(tabs: <Widget>[
+                Tab(icon: Icon(Icons.cloud_outlined)),
+                Tab(icon: Icon(Icons.beach_access_sharp)),
+              ]),
+            ),
+            body: TabBarView(
+              children: [
+                ContactListView1(),
+                ContactListView2(),
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return AddContactWidget();
+                }));
+              },
+            ),
           ),
         );
       },
     );
+  }
+}
+
+class ContactListView1 extends StatelessWidget {
+  const ContactListView1({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ContactProvider>(
+        builder: (context, contactProvider, child) {
+      return ListView.builder(
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: CircleAvatar(
+              child: Text(contactProvider.items[index].name[0]),
+            ),
+            title: Text(
+              contactProvider.items[index].name,
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  contactProvider.items[index].phone,
+                ),
+                Text(
+                  contactProvider.items[index].email,
+                ),
+              ],
+            ),
+            trailing: IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('Delete Contact'),
+                      content:
+                          Text('Are you sure you want to delete this contact'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Provider.of<ContactProvider>(context, listen: false)
+                                .deleteContact(index);
+                            Navigator.pop(context);
+                          },
+                          child: Text('Delete'),
+                        )
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  final provider =
+                      Provider.of<ContactProvider>(context, listen: false);
+                  provider.setCurrentContact(provider.items[index]);
+                  return EditContactWidget();
+                },
+              ));
+            },
+          );
+        },
+        itemCount: contactProvider.items.length,
+      );
+    });
+  }
+}
+
+class ContactListView2 extends StatelessWidget {
+  const ContactListView2({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ContactProvider>(
+        builder: (context, contactProvider, child) {
+      return GridView.builder(
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        itemBuilder: (context, index) {
+          return Card(
+            color: Colors.blueGrey,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            elevation: 8,
+            child: Container(
+              child: Center(),
+            ),
+          );
+        },
+        itemCount: contactProvider.items.length,
+      );
+    });
   }
 }

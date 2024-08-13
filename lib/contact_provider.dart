@@ -70,8 +70,8 @@ class ContactProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteContact(int index) {
-    int index = _items.indexWhere((c) => c.id == _currentContact.id);
+  void deleteContact(int i) {
+    int index = _items.indexWhere((c) => c.id == i);
     if (index != -1) {
       _items.removeAt(index);
     }
