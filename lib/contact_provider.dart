@@ -1,11 +1,36 @@
 import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:my_contact/contact.dart';
 
-class ContactModel extends ChangeNotifier {
-  static int _lastId = 1;
-  final List<Contact> _items = [];
+class ContactProvider extends ChangeNotifier {
+  static int _lastId = 6;
+  final List<Contact> _items = [
+    Contact(
+        id: 1,
+        name: 'Contact1',
+        phone: '0888888881',
+        email: 'contact1@gmail.com'),
+    Contact(
+        id: 2,
+        name: 'Contact2',
+        phone: '0888888882',
+        email: 'contact2@gmail.com'),
+    Contact(
+        id: 3,
+        name: 'Contact3',
+        phone: '0888888883',
+        email: 'contact3@gmail.com'),
+    Contact(
+        id: 4,
+        name: 'Contact4',
+        phone: '0888888884',
+        email: 'contact4@gmail.com'),
+    Contact(
+        id: 5,
+        name: 'Contact5',
+        phone: '0888888885',
+        email: 'contact5@gmail.com'),
+  ];
   Contact _currentContact = Contact(id: -1, name: '', email: '', phone: '');
   UnmodifiableListView<Contact> get items => UnmodifiableListView(_items);
   Contact get currentContact => _currentContact;
@@ -40,6 +65,14 @@ class ContactModel extends ChangeNotifier {
         //     phone: _currentContact.phone,
         //     email: _currentContact.email);
       }
+    }
+    notifyListeners();
+  }
+
+  void deleteContact(int index) {
+    int index = _items.indexWhere((c) => c.id == _currentContact.id);
+    if (index != -1) {
+      _items.removeAt(index);
     }
     notifyListeners();
   }

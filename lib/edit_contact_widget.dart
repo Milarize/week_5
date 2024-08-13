@@ -4,10 +4,7 @@ import 'package:my_contact/contact.dart';
 
 class EditContactWidget extends StatefulWidget {
   final Function(Contact contact) editContact;
-  final Contact contact;
-  const EditContactWidget(
-      {Key? key, required this.contact, required this.editContact})
-      : super(key: key);
+  const EditContactWidget({Key? key}) : super(key: key);
 
   @override
   _EditContactWidgetState createState() => _EditContactWidgetState();
@@ -16,25 +13,23 @@ class EditContactWidget extends StatefulWidget {
 class _EditContactWidgetState extends State<EditContactWidget> {
   final _formKey = GlobalKey<FormState>();
 
-  late TextEditingController nameController;
-
-  late TextEditingController phoneController;
-
-  late TextEditingController emailController;
+  late TextEditingController nameConTroller;
+  late TextEditingController phoneConTroller;
+  late TextEditingController emailConTroller;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    nameController = TextEditingController(text: widget.contact.name);
-    phoneController = TextEditingController(text: widget.contact.phone);
-    emailController = TextEditingController(text: widget.contact.email);
+    nameConTroller = TextEditingController(text: widget.contact.name);
+    phoneConTroller = TextEditingController(text: widget.contact.phone);
+    emailConTroller = TextEditingController(text: widget.contact.email);
   }
 
   @override
   void dispose() {
-    nameController.dispose();
-    phoneController.dispose();
-    emailController.dispose();
+    nameConTroller.dispose();
+    phoneConTroller.dispose();
+    emailConTroller.dispose();
     super.dispose();
   }
 
@@ -45,70 +40,60 @@ class _EditContactWidgetState extends State<EditContactWidget> {
         title: Text('Edit New Contact'),
       ),
       body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: EdgeInsets.all(16),
-          children: [
+          key: _formKey,
+          child: ListView(padding: EdgeInsets.all(16), children: [
             TextFormField(
-              controller: nameController,
+              controller: nameConTroller,
               decoration: InputDecoration(
                   labelText: 'Name', border: OutlineInputBorder()),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter name';
+                  return 'Please enter name text';
                 }
                 return null;
               },
             ),
-            SizedBox(
-              height: 16,
-            ),
+            SizedBox(height: 16),
             TextFormField(
-              controller: phoneController,
+              controller: phoneConTroller,
               decoration: InputDecoration(
                   labelText: 'Phone', border: OutlineInputBorder()),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter phone';
+                  return 'Please enter phone ';
                 }
                 return null;
               },
             ),
-            SizedBox(
-              height: 16,
-            ),
+            SizedBox(height: 16),
             TextFormField(
-              controller: emailController,
+              controller: emailConTroller,
               decoration: InputDecoration(
                   labelText: 'Email', border: OutlineInputBorder()),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter email';
+                  return 'Please enter email ';
                 }
                 return null;
               },
             ),
-            SizedBox(
-              height: 16,
-            ),
+            SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  Navigator.pop(context);
-                  widget.editContact(Contact(
-                      id: widget.contact.id,
-                      name: nameController.text,
-                      phone: phoneController.text,
-                      email: emailController.text));
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text('Process Data')));
-                }
-              },
-              child: Text('Edit Contact'),
-            )
-          ],
-        ),
-      ),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.pop(context);
+                    widget.editContact(Contact(
+                        id: widget.contact.id,
+                        name: nameConTroller.text,
+                        phone: phoneConTroller.text,
+                        email: emailConTroller.text));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Process Data'),
+                    ));
+                  }
+                },
+                child: Text('Edit contact'))
+          ])),
     );
   }
 }
