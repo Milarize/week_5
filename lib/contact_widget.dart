@@ -74,11 +74,14 @@ class _ContactWidgetState extends State<ContactWidget> {
                   },
                 ),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditContactWidget(),
-                      ));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      final provider =
+                          Provider.of<ContactProvider>(context, listen: false);
+                      provider.setCurrentContact(provider.items[index]);
+                      return EditContactWidget();
+                    },
+                  ));
                 },
               );
             },

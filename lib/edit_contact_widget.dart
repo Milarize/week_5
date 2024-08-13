@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:my_contact/contact.dart';
+import 'package:my_contact/contact_provider.dart';
+import 'package:provider/provider.dart';
 
 class EditContactWidget extends StatefulWidget {
-  final Function(Contact contact) editContact;
   const EditContactWidget({Key? key}) : super(key: key);
 
   @override
@@ -20,9 +21,12 @@ class _EditContactWidgetState extends State<EditContactWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    nameConTroller = TextEditingController(text: widget.contact.name);
-    phoneConTroller = TextEditingController(text: widget.contact.phone);
-    emailConTroller = TextEditingController(text: widget.contact.email);
+    final provider = Provider.of<ContactProvider>(context, listen: false);
+    nameConTroller = TextEditingController(text: provider.currentContact.name);
+    phoneConTroller =
+        TextEditingController(text: provider.currentContact.phone);
+    emailConTroller =
+        TextEditingController(text: provider.currentContact.email);
   }
 
   @override
@@ -81,12 +85,14 @@ class _EditContactWidgetState extends State<EditContactWidget> {
             ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    final provider =
+                        Provider.of<ContactProvider>(context, listen: false);
                     Navigator.pop(context);
-                    widget.editContact(Contact(
-                        id: widget.contact.id,
+                    Contact currentContact = provider.currentContact.copyWith(
                         name: nameConTroller.text,
                         phone: phoneConTroller.text,
-                        email: emailConTroller.text));
+                        email: emailConTroller.text);
+                    provider.setCurrentContact(currentContact);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text('Process Data'),
                     ));
