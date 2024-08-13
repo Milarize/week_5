@@ -9,27 +9,27 @@ class ContactProvider extends ChangeNotifier {
     Contact(
         id: 1,
         name: 'Contact1',
-        phone: '0888888881',
+        phone: '0888888888',
         email: 'contact1@gmail.com'),
     Contact(
         id: 2,
         name: 'Contact2',
-        phone: '0888888882',
+        phone: '0888888888',
         email: 'contact2@gmail.com'),
     Contact(
         id: 3,
         name: 'Contact3',
-        phone: '0888888883',
+        phone: '0888888888',
         email: 'contact3@gmail.com'),
     Contact(
         id: 4,
         name: 'Contact4',
-        phone: '0888888884',
+        phone: '0888888888',
         email: 'contact4@gmail.com'),
     Contact(
         id: 5,
         name: 'Contact5',
-        phone: '0888888885',
+        phone: '0888888888',
         email: 'contact5@gmail.com'),
   ];
   Contact _currentContact = Contact(id: -1, name: '', email: '', phone: '');
@@ -70,8 +70,7 @@ class ContactProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteContact(int i) {
-    int index = _items.indexWhere((c) => c.id == i);
+  void deleteContact(int index) {
     if (index != -1) {
       _items.removeAt(index);
     }

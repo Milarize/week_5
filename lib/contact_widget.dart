@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:my_contact/add_contact_widget.dart';
 import 'package:my_contact/contact.dart';
@@ -25,7 +26,7 @@ class _ContactWidgetState extends State<ContactWidget> {
               title: Text('My Contact'),
               bottom: TabBar(tabs: <Widget>[
                 Tab(icon: Icon(Icons.cloud_outlined)),
-                Tab(icon: Icon(Icons.beach_access_sharp)),
+                Tab(icon: Icon(Icons.card_giftcard)),
               ]),
             ),
             body: TabBarView(
@@ -134,25 +135,105 @@ class ContactListView2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // List of emojis to choose from
+    final emojis = [
+      '😀', '😎', '🤩', '😍', '🧐', 
+      '🤓', '😇', '🧙‍♂️', '🦸‍♀️', '👨‍🚀',
+    ];
+
     return Consumer<ContactProvider>(
-        builder: (context, contactProvider, child) {
-      return GridView.builder(
-        gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        itemBuilder: (context, index) {
-          return Card(
-            color: Colors.blueGrey,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            elevation: 8,
-            child: Container(
-              child: Center(),
-            ),
-          );
-        },
-        itemCount: contactProvider.items.length,
-      );
-    });
+      builder: (context, contactProvider, child) {
+        return GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, 
+          ),
+          itemCount: contactProvider.items.length,
+          itemBuilder: (context, index) {
+            final contact = contactProvider.items[index];
+            final randomEmoji = emojis[Random().nextInt(emojis.length)]; // Randomly select an emoji
+
+            return Card(
+              color: Colors.blueGrey,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              elevation: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CircleAvatar(
+                          child: Text(randomEmoji),
+                          backgroundColor: Color.fromARGB(255, 18, 19, 62),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete,
+                              color: Color.fromARGB(255, 224, 89, 76)),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Delete Contact'),
+                                  content: const Text(
+                                      'Are you sure you want to delete this contact?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Provider.of<ContactProvider>(context,
+                                                listen: false)
+                                            .deleteContact(index);
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Delete'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      contact.name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4.0),
+                    Text(
+                      contact.phone,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                      ),
+                    ),
+                    const SizedBox(height: 4.0),
+                    Text(
+                      contact.email,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }
