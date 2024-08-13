@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:my_contact/contact.dart';
 
 class ContactModel extends ChangeNotifier {
+  static int _lastId = 1;
   final List<Contact> _items = [];
   Contact _currentContact = Contact(id: -1, name: '', email: '', phone: '');
   UnmodifiableListView<Contact> get items => UnmodifiableListView(_items);
@@ -17,6 +18,28 @@ class ContactModel extends ChangeNotifier {
           name: contact.name,
           email: contact.email,
           phone: contact.phone);
+    }
+    notifyListeners();
+  }
+
+  void saveContact() {
+    if (_currentContact.id < 0) {
+      _items.add(_currentContact.copyWith(id: _lastId++));
+      // _items.add(Contact(
+      //     id: _lastId++,
+      //     name: _currentContact.name,
+      //     phone: _currentContact.phone,
+      //     email: _currentContact.email));
+    } else {
+      int index = _items.indexWhere((c) => c.id == _currentContact.id);
+      if (index != -1) {
+        _items[index] = _currentContact.copyWith();
+        // _items[index] = Contact(
+        //     id: _currentContact.id,
+        //     name: _currentContact.name,
+        //     phone: _currentContact.phone,
+        //     email: _currentContact.email);
+      }
     }
     notifyListeners();
   }
